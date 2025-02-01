@@ -1,29 +1,56 @@
-import logo from './logo.svg';
 import './App.css';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import { useState } from "react";
+
+function InputTextField({inputText, onChange}) {
+return <TextField
+    id="input-field"
+    label="Standard"
+    variant="standard"
+    value={inputText}
+    onChange={onChange}
+  />
+}
 
 function App() {
-  const [data, setData] = useState("");
+  const [inputText, setInputText] = useState("");
+  const handleSend = async () => {
+    console.log("Sending request with:", inputText); // Debugging line
+    try {
+      const response = await fetch("http://localhost:8080/api/hello", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: inputText }),
+      });
+      console.log("response: ", response)
 
-  useEffect(() => {
-      // Replace with your Spring Boot API endpoint
-      axios.get('http://localhost:8080/api/hello')
-        .then(response => {
-          setData(response.data);  // Save the response data to state
-        })
-        .catch(error => {
-          console.error("There was an error fetching data!", error);
-        });
-    }, []);  // Empty array ensures this runs only once on component mount
-
-    return (
+      if (response.ok) {
+        alert("Message sent successfully!");
+        setInputText(""); // Clear input after sending
+      } else {
+        alert("Failed to send message.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred.");
+    }
+  }
+  return (
+    <div>
+      <h1>Users List</h1>
       <div>
-        <h1>Users List</h1>
-        <div>
-        {data}
-        </div>
+      {InputTextField(
+          inputText,
+         (e) => setInputText(e.target.value))}
       </div>
+      <div>
+        <Button variant="contained" onClick={handleSend}>Send</Button>
+      </div>
+    </div>
     );
 }
 
