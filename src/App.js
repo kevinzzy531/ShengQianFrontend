@@ -3,6 +3,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useState } from "react";
+import CategorySelect from "./CategorySelect";
 
 function InputTextField({inputText, onChange}) {
 return <TextField
@@ -16,6 +17,8 @@ return <TextField
 
 function App() {
   const [inputText, setInputText] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   const handleSend = async () => {
     console.log("Sending request with:", inputText); // Debugging line
     try {
@@ -47,6 +50,10 @@ function App() {
           inputText,
          (e) => setInputText(e.target.value))}
       </div>
+      <CategorySelect
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
       <div>
         <Button variant="contained" onClick={handleSend}>Send</Button>
       </div>
