@@ -5,19 +5,29 @@ import TextField from '@mui/material/TextField';
 import { useState } from "react";
 import CategorySelect from "./CategorySelect";
 
-function InputTextField({inputText, onChange}) {
-return <TextField
-    id="input-field"
-    label="Standard"
-    variant="standard"
-    value={inputText}
-    onChange={onChange}
-  />
+const InputTextField = ({ inputText, setInputText }) => {
+  const handleChange = (e) => {
+    setInputText(e.target.value);
+  }
+
+  return (
+    <TextField
+      fullWidth 
+      label="Standard" 
+      variant="outlined" 
+      value={inputText} 
+      onChange={handleChange}
+    />
+  );
 }
 
 function App() {
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText]  = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+
+  const handleInputTextChange = (newValue) => {
+    setInputText(newValue);
+  }
 
   const handleSend = async () => {
     console.log("Sending request with:", inputText); // Debugging line
@@ -45,11 +55,10 @@ function App() {
   return (
     <div>
       <h1>Users List</h1>
-      <div>
-      {InputTextField(
-          inputText,
-         (e) => setInputText(e.target.value))}
-      </div>
+      <InputTextField
+        inputText={inputText}
+        setInputText = {setInputText}
+      />
       <CategorySelect
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
